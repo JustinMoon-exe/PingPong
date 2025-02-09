@@ -41,7 +41,7 @@ docker logs -f s2  # Kotlin service
 
 ---
 
-## 📝 Implementation Details  
+## Implementation Details  
 
 ### Service-1 (Spring/Java)  
 - **RabbitConfig.java**:  
