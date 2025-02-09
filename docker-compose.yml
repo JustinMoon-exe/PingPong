@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - nodal-network
+
+  service1:
+    build: ./service1
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+    networks:
+      - nodal-network
+
+  service2:
+    build: ./service2
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - rabbitmq
+    networks:
+      - nodal-network
+
+networks:
+  nodal-network:
+    driver: bridge
