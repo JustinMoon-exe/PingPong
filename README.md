@@ -1,110 +1,22 @@
+# PingPong: Real-Time Signal Distribution Platform
 
-# Nodal Exchange Take-Home Assessment: Spring + Kotlin + RabbitMQ  
-**Candidate: Justin Moonjeli**  
-**Submission Date: Feb 9, 2025**  
+## Overview
+SignalFlow is a high-performance platform designed to disseminate real-time signals across a microservices architecture. Built using Java (Spring Boot) and Kotlin, the system leverages asynchronous messaging with RabbitMQ to ensure low-latency, fault-tolerant communication between services. Containerized with Docker and orchestrated via Docker Compose, SignalFlow offers a scalable and reliable solution for real-time signal distribution.
 
----
+## Architecture
+- **Service 1 (Java, Spring Boot):** Publishes and receives signal messages.
+- **Service 2 (Kotlin):** Consumes signals, processes them, and responds accordingly.
+- **RabbitMQ:** Acts as the message broker to facilitate asynchronous, low-latency communication.
+- **Docker & Docker Compose:** Containerizes and orchestrates the services for seamless deployment.
 
-## Overview  
-This project demonstrates two containerized services (**S1** in Spring/Java and **S2** in Kotlin) communicating via RabbitMQ in a "ping-pong" loop. The implementation includes retry logic for RabbitMQ startup delay and routing configuration. Below, I detail my process, challenges, and how AI tools accelerated my learning.  
+## Features
+- Asynchronous messaging for real-time signal exchange
+- Low-latency and fault-tolerant communication between services
+- Scalable microservices architecture
+- Containerized deployment with Docker and Docker Compose
+- Easy monitoring via service logs and the RabbitMQ management console
 
----
+## Prerequisites
+- [Docker](https://docs.docker.com/get-docker/) (v20+)
+- [Docker Compose](https://docs.docker.com/compose/install/) (v1.29+)
 
-## Key Features  
-- **Service-1 (S1)**:  
-  - Spring Boot app using `RabbitTemplate` for publishing messages.  
-  - Retry logic to handle RabbitMQ connection startup delays.  
-  - Schedules periodic "ping" messages after 10-second delays.  
-
-- **Service-2 (S2)**:  
-  - Kotlin app with RabbitMQ connection retries.  
-  - Coroutine-based 10-second delay using `delay(10000)`.  
-
-- **RabbitMQ**:  
-  - Direct exchange `messages_exchange` with routing keys `s1` and `s2`.  
-  - Queues: `s1_queue`, `s2_queue`
----
-
-## Setup  
-### Prerequisites  
-- Docker & Docker Compose (latest versions).  
-
-### Run the Project  
-```bash  
-# Start services  
-docker-compose up -d  
-
-# View logs  
-docker logs -f s1  # Spring service  
-docker logs -f s2  # Kotlin service  
-```  
-
----
-
-## Implementation Details  
-
-### Service-1 (Spring/Java)  
-- **RabbitConfig.java**:  
-  - Declares `messages_exchange`, queues (`s1_queue`, `s2_queue`), and bindings.  
-  - Uses `@RabbitListener` to consume messages from `s1_queue`.  
-
-- **MessageListener.java**:  
-  - On receiving "ping", sends "pong" to S2 via `s2` routing key.  
-  - Uses `ScheduledExecutorService` to schedule the next "ping" after 10 seconds.  
-
-- **S1Initializer.java**:  
-  - Retries RabbitMQ connection 5 times with 5-second intervals.  
-
-### Service-2 (Kotlin)  
-- **Main.kt**:  
-  - Retries RabbitMQ connection until successful.  
-  - On receiving "ping", sends "pong" immediately and schedules the next "ping" after 10 seconds using coroutines.  
-
----
-
-## Learning Process & Challenges  
-### Initial Knowledge Gaps  
-- **Docker**:  
-  - Minor prior experience (basic `Dockerfile` usage).  
-  - **AI Assistance**:  
-    - Learned about multi-stage builds, service dependencies, and Docker networking (e.g., using `rabbitmq` as the hostname).  
-
-- **RabbitMQ**:  
-  - Zero prior experience.  
-  - **AI Assistance**:  
-    - Learned about configuration, routing, queues and exhanges, as well as interfacing with Docker 
-
-### Key Challenges & Solutions  
-1. **RabbitMQ Connection Retries**:  
-   - S1/S2 failed to start if RabbitMQ wasn’t ready.  
-   - **Solution**:  
-     - Added retry loops (5 attempts, 5-second intervals) in both services.  
-     - AI-generated code snippets for retry logic in Spring (`S1Initializer`) and Kotlin.  
-
-2. **Docker Networking Issues**:  
-   - S2 couldn’t connect to `rabbitmq` host.  
-   - **Solution**:  
-     - AI advice: *"Ensure services are in the same Docker network via `docker-compose`."* → Verified `depends_on` and network aliases.  
-
----
-
-## Time Investment  
-- **Total Time**: ~2.5 hours.  
-  - **Learning Docker/RabbitMQ**: 1 hour (AI + official docs).  
-  - **Coding & Debugging**: 1.5 hours.  
-
----
-
-## AI Tools Used  
-- **ChatGPT**:  
-  - Generated boilerplate code for Spring `@RabbitListener` and Kotlin coroutines.  
-  - Explained RabbitMQ concepts (exchanges, bindings, routing keys).  
-  - Debugged Docker errors (e.g., port conflicts).  
-
-- **DeepSeek**:  
-  - Provided information on build tools and Java version mismatch with Gradle  
-
----
-
-## Conclusion  
-This project was a crash course in Docker and RabbitMQ. With **AI as a mentor**, I quickly bridged knowledge gaps, debugged issues, and implemented a robust messaging system. The result is a scalable, containerized setup that meets all requirements. 
