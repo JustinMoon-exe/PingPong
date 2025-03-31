@@ -1,7 +1,7 @@
 # PingPong: Real-Time Signal Distribution Platform
 
 ## Overview
-SignalFlow is a high-performance platform designed to disseminate real-time signals across a microservices architecture. Built using Java (Spring Boot) and Kotlin, the system leverages asynchronous messaging with RabbitMQ to ensure low-latency, fault-tolerant communication between services. Containerized with Docker and orchestrated via Docker Compose, SignalFlow offers a scalable and reliable solution for real-time signal distribution.
+PingPong is a high-performance platform demo designed to disseminate real-time signals across a microservices architecture. Built using Java (Spring Boot) and Kotlin, the system leverages asynchronous messaging with RabbitMQ to ensure low-latency, fault-tolerant communication between services. Containerized with Docker and orchestrated via Docker Compose, SignalFlow offers a scalable and reliable solution for real-time signal distribution.
 
 ## Architecture
 - **Service 1 (Java, Spring Boot):** Publishes and receives signal messages.
